@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SoftResource.Deployer.Service")]
+[assembly: AssemblyTitle("SoftResource.Deployer.ServiceNew")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SoftResource.Deployer.Service")]
+[assembly: AssemblyProduct("SoftResource.Deployer.ServiceNew")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("24ab49c8-938e-4e47-b1df-6dc17bc96cf2")]
+[assembly: Guid("51c4dbbe-9bbc-4aa8-bf86-f65f7096680b")]
 
 // Version information for an assembly consists of the following four values:
 //

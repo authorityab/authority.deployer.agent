@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Deployer.Api.Models;
 
-namespace Deployer.Service
+namespace Deployer.Service.Classes
 {
     public class BuildComparer : IEqualityComparer<Build>
     {
