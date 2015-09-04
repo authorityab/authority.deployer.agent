@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Deployer.Api.Classes;
-using Deployer.Api.Models;
-using Deployer.Api.Services;
-using Deployer.Api.Services.Contracts;
-using Deployer.Service.Classes;
-using Deployer.Service.Contracts;
+using Authority.Deployer.Api.Classes;
+using Authority.Deployer.Api.Models;
+using Authority.Deployer.Api.Services;
+using Authority.Deployer.Api.Services.Contracts;
+using Authority.Deployer.Service.Classes;
+using Authority.Deployer.Service.Contracts;
 using log4net;
 
-namespace Deployer.Service.Jobs.TeamCityPolling
+namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 {
     public class LogicLayer : ILogicLayer
     {

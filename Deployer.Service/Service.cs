@@ -1,11 +1,11 @@
 ﻿using System.Configuration;
 using Atlas;
-using Deployer.Service.Jobs.TeamCityPolling;
+using Authority.Deployer.Service.Jobs.TeamCityPolling;
 using log4net;
 using Quartz;
 using Quartz.Spi;
 
-namespace Deployer.Service
+namespace Authority.Deployer.Service
 {
     public class Service : IAmAHostedProcess
     {
