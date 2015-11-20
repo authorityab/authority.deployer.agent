@@ -37,7 +37,8 @@
     <Reference Include="Atlas">
       <HintPath>packages\Atlas.1.9\lib\net40\Atlas.dll</HintPath>
     </Reference>
-    <Reference Include="Authority.Deployer.Api">
+    <Reference Include="Authority.Deployer.Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Authority.Deployer.Api.dll</HintPath>
     </Reference>
     <Reference Include="Autofac">

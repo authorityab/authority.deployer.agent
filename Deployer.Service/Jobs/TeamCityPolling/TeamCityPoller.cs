@@ -74,6 +74,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
         public void Dispose()
         {
+            Log.Info("TeamCity polling job disposed.");
         }
     }
 
