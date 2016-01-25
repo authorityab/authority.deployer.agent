@@ -14,14 +14,10 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
     public class LogicLayer : ILogicLayer
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LogicLayer));
-
-        public ITeamCityService TcService { get; set; }
-
-        public INodeService NodeService { get; set; }
-
-        private bool IsSuccess;
-
+        private ITeamCityService TcService { get; set; }
+        private INodeService NodeService { get; set; }
         private List<Build> _lastBuilds;
+        private bool _isSuccess;
 
         public LogicLayer()
         {
@@ -36,7 +32,6 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
             try
             {
-                
                 var builds = TcService.GetAllBuilds();
 
                 if (_lastBuilds != null)
@@ -50,14 +45,14 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                             NodeService.PostLatestFailedBuild(latestFailedBuild);
                         }
 
-                        IsSuccess = NodeService.PostBuilds(builds);
+                        _isSuccess = NodeService.PostBuilds(builds);
                     }
                 }
 
-                if (_lastBuilds == null && !IsSuccess)
+                if (_lastBuilds == null && !_isSuccess)
                 {
                     // Send builds to node
-                    IsSuccess = NodeService.PostBuilds(builds);
+                    _isSuccess = NodeService.PostBuilds(builds);
                 }
 
                 // Send latest build to node, builds.first()
@@ -66,7 +61,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                     NodeService.PostLatestBuild(builds.First());
                 }
 
-                if (IsSuccess && builds.Count > 0)
+                if (_isSuccess && builds.Count > 0)
                 {
                     _lastBuilds = builds;
                 }
@@ -77,7 +72,6 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
             }
 
             Log.Info("Polling finished.");
-
         }
 
         public void Dispose()
