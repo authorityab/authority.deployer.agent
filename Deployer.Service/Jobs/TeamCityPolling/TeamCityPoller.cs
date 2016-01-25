@@ -19,6 +19,8 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
         public INodeService NodeService { get; set; }
 
+        private bool IsSuccess;
+
         private List<Build> _lastBuilds;
 
         public LogicLayer()
@@ -34,7 +36,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
             try
             {
-                var isSuccess = false;
+                
                 var builds = TcService.GetAllBuilds();
 
                 if (_lastBuilds != null)
@@ -47,9 +49,15 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                             var latestFailedBuild = TcService.GetLatestFailedBuild();
                             NodeService.PostLatestFailedBuild(latestFailedBuild);
                         }
-                        // Send builds to node
-                        isSuccess = NodeService.PostBuilds(builds);
+
+                        IsSuccess = NodeService.PostBuilds(builds);
                     }
+                }
+
+                if (_lastBuilds == null && !IsSuccess)
+                {
+                    // Send builds to node
+                    IsSuccess = NodeService.PostBuilds(builds);
                 }
 
                 // Send latest build to node, builds.first()
@@ -58,7 +66,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                     NodeService.PostLatestBuild(builds.First());
                 }
 
-                if (isSuccess && builds.Count > 0)
+                if (IsSuccess && builds.Count > 0)
                 {
                     _lastBuilds = builds;
                 }
