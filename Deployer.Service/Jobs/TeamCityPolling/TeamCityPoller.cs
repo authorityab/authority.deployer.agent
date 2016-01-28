@@ -14,16 +14,16 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
     public class LogicLayer : ILogicLayer
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LogicLayer));
-        private ITeamCityService TcService { get; set; }
-        private INodeService NodeService { get; set; }
+        private ITeamCityService _tcService;
+        private INodeService _nodeService;
         private List<Build> _lastBuilds;
         private bool _isSuccess;
 
         public LogicLayer()
         {
             // TODO: Fix Dependecy Injection on these services.
-            TcService = new TeamCityService();
-            NodeService = new NodeService();
+            _tcService = new TeamCityService();
+            _nodeService = new NodeService();
         }
 
         public void Run()
@@ -32,7 +32,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
             try
             {
-                var builds = TcService.GetAllBuilds();
+                var builds = _tcService.GetAllBuilds();
 
                 if (_lastBuilds != null)
                 {
@@ -41,24 +41,24 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                         if (builds.Any(x => x.Status == BuildStatus.Failure.ToString().ToUpper()))
                         {
                             // Get latest failed build, send to node;
-                            var latestFailedBuild = TcService.GetLatestFailedBuild();
-                            NodeService.PostLatestFailedBuild(latestFailedBuild);
+                            var latestFailedBuild = _tcService.GetLatestFailedBuild();
+                            _nodeService.PostLatestFailedBuild(latestFailedBuild);
                         }
 
-                        _isSuccess = NodeService.PostBuilds(builds);
+                        _isSuccess = _nodeService.PostBuilds(builds);
                     }
                 }
 
                 if (_lastBuilds == null && !_isSuccess)
                 {
                     // Send builds to node
-                    _isSuccess = NodeService.PostBuilds(builds);
+                    _isSuccess = _nodeService.PostBuilds(builds);
                 }
 
                 // Send latest build to node, builds.first()
                 if (builds.Count > 0)
                 {
-                    NodeService.PostLatestBuild(builds.First());
+                    _nodeService.PostLatestBuild(builds.First());
                 }
 
                 if (_isSuccess && builds.Count > 0)
