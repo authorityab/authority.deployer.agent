@@ -11,15 +11,15 @@ using log4net;
 
 namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 {
-    public class LogicLayer : ILogicLayer
+    public class TeamCityPoller : ILogicLayer
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(LogicLayer));
-        private ITeamCityService _tcService;
-        private INodeService _nodeService;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(TeamCityPoller));
+        private readonly ITeamCityService _tcService;
+        private readonly INodeService _nodeService;
         private List<Build> _lastBuilds;
         private bool _isSuccess;
 
-        public LogicLayer()
+        public TeamCityPoller()
         {
             // TODO: Fix Dependecy Injection on these services.
             _tcService = new TeamCityService();

@@ -65,7 +65,7 @@ namespace Authority.Deployer.Service.Classes
 
         private static void LoadLogicLayers(ContainerBuilder builder)
         {
-            builder.RegisterType<LogicLayer>()
+            builder.RegisterType<TeamCityPoller>()
                 .As<ILogicLayer>()
                 .PropertiesAutowired()
                 .InstancePerLifetimeScope();
