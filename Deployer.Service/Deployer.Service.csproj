@@ -65,6 +65,10 @@
     <Reference Include="Atlas">
       <HintPath>packages\Atlas.1.9\lib\net40\Atlas.dll</HintPath>
     </Reference>
+    <Reference Include="Authority.Deployer.Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Authority.Deployer.Api.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac">
       <HintPath>packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
@@ -143,12 +147,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Authority.Deployer.Api\Deployer.Api\Deployer.Api.csproj">
-      <Project>{28cb3eff-d6ba-452a-802f-f6d222c6f8ce}</Project>
-      <Name>Deployer.Api</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

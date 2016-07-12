@@ -38,8 +38,12 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                 {
                     if (!_lastBuilds.SequenceEqual(builds, new BuildComparer()))
                     {
+                        Log.Info("Found changes in builds, posting to node");
+
                         if (builds.Any(x => x.Status == BuildStatus.Failure.ToString().ToUpper()))
                         {
+                            Log.Info("Found failed build, posting to node");
+
                             // Get latest failed build, send to node;
                             var latestFailedBuild = _tcService.GetLatestFailedBuild();
                             _nodeService.PostLatestFailedBuild(latestFailedBuild);
@@ -51,6 +55,8 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
                 if (_lastBuilds == null && !_isSuccess)
                 {
+                    Log.Info("Last push to node did not succeed, posting again");
+
                     // Send builds to node
                     _isSuccess = _nodeService.PostBuilds(builds);
                 }
@@ -58,6 +64,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                 // Send latest build to node, builds.first()
                 if (builds.Count > 0)
                 {
+                    Log.Info("Posting latest build to node");
                     _nodeService.PostLatestBuild(builds.First());
                 }
 
