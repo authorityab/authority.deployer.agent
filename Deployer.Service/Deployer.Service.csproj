@@ -107,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AutofacConfig.cs" />
-    <Compile Include="Classes\BuildComparer.cs" />
     <Compile Include="Contracts\ILogicLayer.cs" />
     <Compile Include="Scheduling\JobFactory.cs" />
     <Compile Include="Scheduling\JobListener.cs" />

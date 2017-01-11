@@ -36,25 +36,17 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
                 if (_lastBuilds != null)
                 {
-                    var a = _lastBuilds.OrderBy(x => x.Id).ToList();
-                    var b = builds.OrderBy(x => x.Id).ToList();
+                    var a = _lastBuilds.OrderByDescending(x => x.FinishDate).ToList();
+                    var b = builds.OrderByDescending(x => x.FinishDate).ToList();
                     
                     Log.Info("Last builds is not null");
                     if (!a.SequenceEqual(b))
                     {
                         Log.Info("Found changes in builds, posting to node");
-                        
-                        for (var i = 0; i < a.Count(); i++)
-                        {
-                            Log.Debug(a[i].ProjectName + " <--> " + b[i].ProjectName);
-                            Log.Debug(a[i].StepName + " <--> " + b[i].StepName);
-                            Log.Debug(a[i].ProjectId + " <--> " + b[i].ProjectId);
-                            Log.Debug(a[i].Status + " <--> " + b[i].Status);
-                            Log.Debug("Is Equal: " + a[i].Equals(b[i]));
-                            Log.Debug("--------------------------------------");
-                        }
 
-                        if (builds.Any(x => x.Status == BuildStatus.Failure.ToString().ToUpper()))
+                        var failedBuilds =
+                            builds.Where(x => x.Status == BuildStatus.Failure.ToString().ToUpper()).ToList();
+                        if (failedBuilds.Any())
                         {
                             Log.Info("Found failed build, posting to node");
                             
@@ -68,6 +60,8 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                                     _lastFailedBuild = latestFailedBuild;
                                 }
                             }
+
+                            //_nodeService.PostFailedBuilds(failedBuilds);
                         }
 
                         _isSuccess = _nodeService.PostBuilds(builds);
