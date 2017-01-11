@@ -5,7 +5,6 @@ using Authority.Deployer.Api.Classes;
 using Authority.Deployer.Api.Models;
 using Authority.Deployer.Api.Services;
 using Authority.Deployer.Api.Services.Contracts;
-using Authority.Deployer.Service.Classes;
 using Authority.Deployer.Service.Contracts;
 using log4net;
 
@@ -17,6 +16,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
         private readonly ITeamCityService _tcService;
         private readonly INodeService _nodeService;
         private List<Build> _lastBuilds;
+        private Build _lastFailedBuild;
         private bool _isSuccess;
 
         public TeamCityPoller()
@@ -36,20 +36,42 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
                 if (_lastBuilds != null)
                 {
-                    if (!_lastBuilds.SequenceEqual(builds, new BuildComparer()))
+                    var a = _lastBuilds.OrderBy(x => x.Id).ToList();
+                    var b = builds.OrderBy(x => x.Id).ToList();
+                    
+                    Log.Info("Last builds is not null");
+                    if (!a.SequenceEqual(b))
                     {
                         Log.Info("Found changes in builds, posting to node");
+                        
+                        for (var i = 0; i < a.Count(); i++)
+                        {
+                            Log.Debug(a[i].ProjectName + " <--> " + b[i].ProjectName);
+                            Log.Debug(a[i].StepName + " <--> " + b[i].StepName);
+                            Log.Debug(a[i].ProjectId + " <--> " + b[i].ProjectId);
+                            Log.Debug(a[i].Status + " <--> " + b[i].Status);
+                            Log.Debug("Is Equal: " + a[i].Equals(b[i]));
+                            Log.Debug("--------------------------------------");
+                        }
 
                         if (builds.Any(x => x.Status == BuildStatus.Failure.ToString().ToUpper()))
                         {
                             Log.Info("Found failed build, posting to node");
-
+                            
                             // Get latest failed build, send to node;
                             var latestFailedBuild = _tcService.GetLatestFailedBuild();
-                            _nodeService.PostLatestFailedBuild(latestFailedBuild);
+
+                            if (_lastFailedBuild == null || !_lastFailedBuild.Equals(latestFailedBuild))
+                            {
+                                if (_nodeService.PostLatestFailedBuild(latestFailedBuild))
+                                {
+                                    _lastFailedBuild = latestFailedBuild;
+                                }
+                            }
                         }
 
                         _isSuccess = _nodeService.PostBuilds(builds);
+                        Log.Info("Post builds SUCCESS: " + _isSuccess);
                     }
                 }
 
@@ -59,6 +81,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
                     // Send builds to node
                     _isSuccess = _nodeService.PostBuilds(builds);
+                    Log.Info("Post builds SUCCESS: " + _isSuccess);
                 }
 
                 // Send latest build to node, builds.first()
@@ -70,6 +93,7 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
                 if (_isSuccess && builds.Count > 0)
                 {
+                    Log.Info("Replace last builds");
                     _lastBuilds = builds;
                 }
             }
@@ -86,6 +110,4 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
             Log.Info("TeamCity polling job disposed.");
         }
     }
-
-
 }
