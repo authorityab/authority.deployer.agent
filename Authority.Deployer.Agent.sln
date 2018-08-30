@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deployer.Service", "Deployer.Service\Deployer.Service.csproj", "{D6463A03-F5CA-4426-934F-7338A5FD29EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deployer.Agent", "Deployer.Agent\Deployer.Agent.csproj", "{D6463A03-F5CA-4426-934F-7338A5FD29EF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{55677B67-60BC-4EE1-A80D-740CC84221F1}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,9 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{55677B
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCitySharp", "..\TeamCitySharp\src\TeamCitySharp\TeamCitySharp.csproj", "{87598714-132F-478E-866E-8C1AF3E83057}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deployer.Api", "..\Authority.Deployer.Api\Deployer.Api\Deployer.Api.csproj", "{28CB3EFF-D6BA-452A-802F-F6D222C6F8CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCitySharp", "..\TeamCitySharp\src\TeamCitySharp\TeamCitySharp.csproj", "{87598714-132F-478E-866E-8C1AF3E83057}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,14 +26,14 @@ Global
 		{D6463A03-F5CA-4426-934F-7338A5FD29EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6463A03-F5CA-4426-934F-7338A5FD29EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6463A03-F5CA-4426-934F-7338A5FD29EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87598714-132F-478E-866E-8C1AF3E83057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87598714-132F-478E-866E-8C1AF3E83057}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87598714-132F-478E-866E-8C1AF3E83057}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87598714-132F-478E-866E-8C1AF3E83057}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28CB3EFF-D6BA-452A-802F-F6D222C6F8CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28CB3EFF-D6BA-452A-802F-F6D222C6F8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28CB3EFF-D6BA-452A-802F-F6D222C6F8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28CB3EFF-D6BA-452A-802F-F6D222C6F8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87598714-132F-478E-866E-8C1AF3E83057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87598714-132F-478E-866E-8C1AF3E83057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87598714-132F-478E-866E-8C1AF3E83057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87598714-132F-478E-866E-8C1AF3E83057}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

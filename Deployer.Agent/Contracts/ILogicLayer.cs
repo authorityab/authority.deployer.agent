@@ -1,4 +1,4 @@
-﻿namespace Authority.Deployer.Service.Contracts
+﻿namespace Authority.Deployer.Agent.Contracts
 {
     public interface ILogicLayer
     {

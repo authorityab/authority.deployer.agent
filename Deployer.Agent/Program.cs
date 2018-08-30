@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Atlas;
-using Authority.Deployer.Service.Classes;
+using Authority.Deployer.Agent.Classes;
 using Autofac;
 using log4net;
 using log4net.Config;
 
-namespace Authority.Deployer.Service
+namespace Authority.Deployer.Agent
 {
     public class Program
     {

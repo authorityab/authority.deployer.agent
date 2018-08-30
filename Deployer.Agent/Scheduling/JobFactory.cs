@@ -3,7 +3,7 @@ using Autofac;
 using Quartz;
 using Quartz.Spi;
 
-namespace Authority.Deployer.Service.Scheduling
+namespace Authority.Deployer.Agent.Scheduling
 {
     public class JobFactory : IJobFactory
     {

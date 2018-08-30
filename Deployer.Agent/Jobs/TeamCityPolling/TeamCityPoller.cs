@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Authority.Deployer.Api.Classes;
-using Authority.Deployer.Api.Models;
+using Authority.Deployer.Agent.Contracts;
 using Authority.Deployer.Api.Services;
 using Authority.Deployer.Api.Services.Contracts;
-using Authority.Deployer.Service.Contracts;
 using log4net;
 using Build = Authority.Deployer.Api.Models.Build;
 using BuildStatus = Authority.Deployer.Api.Classes.BuildStatus;
 
-namespace Authority.Deployer.Service.Jobs.TeamCityPolling
+namespace Authority.Deployer.Agent.Jobs.TeamCityPolling
 {
     public class TeamCityPoller : ILogicLayer
     {
@@ -21,11 +19,14 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
         private Build _lastFailedBuild;
         private bool _isSuccess;
 
+        
+
         public TeamCityPoller()
         {
             // TODO: Fix Dependecy Injection on these services.
             _tcService = new TeamCityService();
             _nodeService = new NodeService();
+
         }
 
         public void Run()
@@ -44,28 +45,28 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
                     Log.Info("Last builds is not null");
                     if (!a.SequenceEqual(b))
                     {
+                        for (var i = 0; i < a.Count; i++)
+                        {
+                            if (!a[i].Equals(b[i]))
+                            {
+                                Log.Debug("Item not equal");
+                                Log.Debug($"{a[i].ProjectName} <--> {b[i].ProjectName}");
+                                Log.Debug($"{a[i].ProjectId} <--> {b[i].ProjectId}");
+                                Log.Debug($"{a[i].StepName} <--> {b[i].StepName}");
+                                Log.Debug($"{a[i].Status} <--> {b[i].Status}");
+                                Log.Debug("-----------------------------------");
+                            }
+                        }
+
                         Log.Info("Found changes in builds, posting to node");
-
-                        var failedBuilds =
-                            builds.Where(x => x.Status == BuildStatus.Failure.ToString().ToUpper()).ToList();
-                        if (failedBuilds.Any())
-                        {
-                            Log.Info("Found failed build, posting to node");
-
-                            PostLatestFailedBuild();
-
-
-                            //TODO: Maybe
-                            //_nodeService.PostFailedBuilds(failedBuilds);
-                        }
-                        else
-                        {
-                            _lastFailedBuild = null;
-                        }
-
+                        
                         _isSuccess = _nodeService.PostBuilds(builds);
                         Log.Info("Post builds SUCCESS: " + _isSuccess);
+
+                        //_tcService.PutBuildsInCache(builds);
                     }
+
+                    CheckForFailedBuilds(builds);
                 }
 
                 if (_lastBuilds == null && !_isSuccess)
@@ -76,6 +77,8 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
 
                     // Send builds to node
                     _isSuccess = _nodeService.PostBuilds(builds);
+
+                    //_tcService.PutBuildsInCache(builds);
                     Log.Info("Post builds SUCCESS: " + _isSuccess);
                 }
 
@@ -100,17 +103,33 @@ namespace Authority.Deployer.Service.Jobs.TeamCityPolling
             Log.Info("Polling finished.");
         }
 
-        private void PostLatestFailedBuild()
-        {
-            // Get latest failed build, send to node;
-            var latestFailedBuild = _tcService.GetLatestFailedBuild();
+     
 
-            if (_lastFailedBuild == null || !_lastFailedBuild.Equals(latestFailedBuild) || _lastFailedBuild.FinishDate != latestFailedBuild.FinishDate)
+        private void CheckForFailedBuilds(IEnumerable<Build> builds)
+        {
+            var failedBuilds = builds.Where(x => x.Status == BuildStatus.Failure.ToString().ToUpper()).ToList();
+            if (failedBuilds.Any())
             {
-                if (_nodeService.PostLatestFailedBuild(latestFailedBuild))
+                // Get latest failed build, send to node;
+                var latestFailedBuild = _tcService.GetLatestFailedBuild();
+
+                if (_lastFailedBuild == null || !_lastFailedBuild.Equals(latestFailedBuild)
+                    || _lastFailedBuild.FinishDate != latestFailedBuild.FinishDate
+                    || _lastFailedBuild.LastModifiedBy != latestFailedBuild.LastModifiedBy)
                 {
-                    _lastFailedBuild = latestFailedBuild;
+                    Log.Info("Found failed build, posting to node");
+                    if (_nodeService.PostLatestFailedBuild(latestFailedBuild))
+                    {
+                        _lastFailedBuild = latestFailedBuild;
+                    }
                 }
+
+                //TODO: Maybe
+                //_nodeService.PostFailedBuilds(failedBuilds);
+            }
+            else
+            {
+                _lastFailedBuild = null;
             }
         }
 

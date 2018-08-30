@@ -2,7 +2,7 @@
 using Atlas;
 using Quartz;
 
-namespace Authority.Deployer.Service.Scheduling
+namespace Authority.Deployer.Agent.Scheduling
 {
     public class JobListener : IJobListener
     {

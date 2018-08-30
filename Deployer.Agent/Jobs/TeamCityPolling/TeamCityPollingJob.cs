@@ -1,8 +1,8 @@
-﻿using Authority.Deployer.Service.Contracts;
+﻿using Authority.Deployer.Agent.Contracts;
 using log4net;
 using Quartz;
 
-namespace Authority.Deployer.Service.Jobs.TeamCityPolling
+namespace Authority.Deployer.Agent.Jobs.TeamCityPolling
 {
     [DisallowConcurrentExecution]
     public class TeamCityPollingJob : IJob

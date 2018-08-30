@@ -1,15 +1,15 @@
 ﻿using System.Reflection;
 using Atlas;
-using Authority.Deployer.Service.Contracts;
-using Authority.Deployer.Service.Jobs.TeamCityPolling;
-using Authority.Deployer.Service.Scheduling;
+using Authority.Deployer.Agent.Contracts;
+using Authority.Deployer.Agent.Jobs.TeamCityPolling;
+using Authority.Deployer.Agent.Scheduling;
 using Autofac;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using Module = Autofac.Module;
 
-namespace Authority.Deployer.Service.Classes
+namespace Authority.Deployer.Agent.Classes
 {
     public class AutofacConfig : Module
     {
